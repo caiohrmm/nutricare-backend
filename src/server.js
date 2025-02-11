@@ -2,7 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { sequelize, defineModels } = require("./models/index");
+const { sequelize, defineModels } = require("./models/defineModels");
+
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -10,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Teste de conexão e sincronização do banco de dados
+// Testa conexão com o banco e sincroniza tabelas
 (async () => {
     try {
         await defineModels();
@@ -21,6 +23,8 @@ app.use(bodyParser.json());
 })();
 
 // Rotas
+app.use("/api/auth", authRoutes);
+
 app.get("/", (req, res) => {
     res.send("API NutriCare está rodando! 🚀");
 });
